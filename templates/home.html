@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="text-center mb-4">
+    {% if query %}
+        Search Results for "{{ query }}"
+    {% elif category %}
+        {{ category.capitalize() }} News
+    {% else %}
+        Top Headlines
+    {% endif %}
+</h2>
+
+<!-- One search bar below the heading -->
+<form class="form-inline mb-4" method="get" action="/">
+    <input class="form-control mr-sm-2" type="search" name="query" placeholder="Search News" value="{{ query }}" aria-label="Search">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+</form>
+
+<div class="row">
+    {% for article in articles %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                {% if article['urlToImage'] %}
+                    <img src="{{ article['urlToImage'] }}" class="card-img-top" alt="News Image">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ article['title'] }}</h5>
+                    <p class="card-text">{{ article['description'] }}</p>
+                    <a href="{{ article['url'] }}" target="_blank" class="btn btn-primary">Read More</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        {% if page > 1 %}
+            <li class="page-item">
+                <a class="page-link" href="/?page={{ page - 1 }}{% if query %}&query={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}">Previous</a>
+            </li>
+        {% endif %}
+        
+        <li class="page-item">
+            <a class="page-link" href="/?page={{ page + 1 }}{% if query %}&query={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}">Next</a>
+        </li>
+    </ul>
+</nav>
+
+{% endblock %}
+
+
